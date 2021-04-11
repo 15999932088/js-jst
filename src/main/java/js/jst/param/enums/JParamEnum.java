@@ -1,5 +1,7 @@
 package js.jst.param.enums;
 
+import js.jst.tool.RandomUtils;
+
 import java.util.Random;
 
 public class JParamEnum {
@@ -23,7 +25,7 @@ public class JParamEnum {
         public static Object getOne(){
             StringParam param = get();
             Random random = new Random();
-            return param.objects[random.nextInt(param.objects.length-1)];
+            return param.objects[RandomUtils.getRandom(param.objects.length-1)];
         }
     }
 
