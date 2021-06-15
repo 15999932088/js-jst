@@ -102,26 +102,43 @@ public class Reflecter {
     }
 
     /**
+     * 解析获取父类的属性
+     * @param fieldList
+     * @param clazz
+     * @return
+     */
+    public List<Field> explainEntitySuperObject(List<Field> fieldList,Class<?> clazz){
+        fieldList.addAll(Arrays.asList(clazz.getDeclaredFields()));
+        Class<?> superClass = clazz.getSuperclass();
+        if(superClass!=null){
+            explainEntitySuperObject(fieldList,superClass);
+        }
+        return fieldList;
+    }
+    /**
      * 解析实体,将他们的属性以sql的列名做匹配,完成sql的查询
      * @param clazz
      * @return
      */
     public Object explainEntityObject(Class<?> clazz){
         try {
-            Field[] fields = clazz.getDeclaredFields();
+            //递归获取这个类的父类所有的属性
+//            Field[] fields = clazz.getDeclaredFields();
+            List<Field> fields = new ArrayList<>();
+            explainEntitySuperObject(fields,clazz);
             //获取表字段，进行查询操作,代理修改SqlMapper的类
             if (ENTITY_TABLE_NAME != null && ENTITY_TABLE_NAME.length() > 0) {
-                if (fields != null && fields.length > 0) {
+                if (fields != null && fields.size() > 0) {
                     for (Field field : fields) {
-                        ENTITY_TABLE_FIELD.add(field.getName());
+                        ENTITY_TABLE_FIELD.add(strTohump(field.getName()));
                     }
                 }
                 Object classObject = clazz.newInstance();
                 ISqlMapper sqlMapper = SpringUtils.getBean(SqlMapper.class);
                 List<Map<String, Object>> sqlDataList = sqlMapper.selectMapper(ENTITY_TABLE_NAME, ENTITY_TABLE_FIELD);
-                if (fields != null && fields.length > 0) {
+                if (fields != null && fields.size() > 0) {
                     for (Field field : fields) {
-                        explainField(classObject, field, sqlDataList);
+                        explainField(classObject, field,strTohump(field.getName()), sqlDataList);
                     }
                 }
                 return classObject;
@@ -137,20 +154,26 @@ public class Reflecter {
      * @param clazz
      * @param field
      */
-    public void explainField(Object clazz,Field field,List<Map<String,Object>> dataList){
+    public void explainField(Object clazz,Field field,String fieldName,List<Map<String,Object>> dataList){
         field.setAccessible(true);
         Class fieldType = field.getType();
         try {
+            boolean hasSetValue = false;
             if(dataList!=null&&dataList.size()>0){
                 Map<String,Object> dataMap = dataList.get(RandomUtils.getRandom(dataList.size()));
-                if(dataMap.containsKey(field.getName())){
+                if(dataMap.containsKey(fieldName)){
+                    hasSetValue = true;
                     if(Integer.class.equals(fieldType)){
-                        field.set(clazz,Integer.valueOf(String.valueOf(dataMap.get(field.getName()))));
+                        field.set(clazz,Integer.valueOf(String.valueOf(dataMap.get(fieldName))));
                     }
                     if(String.class.equals(fieldType)){
-                        field.set(clazz,String.valueOf(dataMap.get(field.getName())));
+                        field.set(clazz,String.valueOf(dataMap.get(fieldName)));
                     }
                 }
+            }
+            if(!hasSetValue){
+                //TODO:是否有注解
+
             }
 //            if (Integer.class.equals(fieldType)) {
 //                field.set(clazz, 55555555);
@@ -178,5 +201,19 @@ public class Reflecter {
                 }
             }
         }
+    }
+
+    //转成驼峰式字符串
+    public String strTohump(String str){
+        char[] strArray =  str.toCharArray();
+        StringBuilder stringBuilder = new StringBuilder();
+        for(char c:strArray){
+            if(c>='A'&&c<='Z'){
+                stringBuilder.append("_");
+                c = (char) (c+32);
+            }
+            stringBuilder.append(c);
+        }
+        return stringBuilder.toString();
     }
 }

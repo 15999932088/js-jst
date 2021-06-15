@@ -32,6 +32,7 @@ public class SqlMapper extends AbsSqlMapper implements ISqlMapper, BeanFactoryAw
         Connection connection = null;
         try{
             List<Map<String, Object>> resultMapList = new ArrayList<>();
+            //TODO:假设10个字段,只有2个是数据库拥有的情况下,应该如何处理
             String sql = new SpliceSqlContext(new SelectSpliceSql()).spliceSql(tableName,tableField);
             sqlSession = sqlSessionFactory.openSession(false);
             connection = sqlSession.getConnection();
@@ -40,7 +41,8 @@ public class SqlMapper extends AbsSqlMapper implements ISqlMapper, BeanFactoryAw
             while(resultSet.next()){
                 Map<String,Object> colMap = new HashMap<>();
                 for (String field : tableField) {
-                    colMap.put(field,resultSet.getObject(field));
+                    Object valObj = resultSet.getObject(field);
+                    colMap.put(field,valObj);
                 }
                 resultMapList.add(colMap);
             }

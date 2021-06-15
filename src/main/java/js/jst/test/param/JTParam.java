@@ -1,6 +1,6 @@
 package js.jst.test.param;
 
-public class JTParam {
+public class JTParam{
 
     String param1;
 

@@ -3,28 +3,16 @@ package js.jst.test.param;
 import js.jst.interfaces.JEntity;
 import js.jst.interfaces.JField;
 
-@JEntity("user")
-public class UserEntity {
+import java.util.List;
 
-    String id;
+@JEntity("user")
+public class UserEntity extends SuperEntity {
 
     String name;
 
+    List<UserEntity> childrenUserEntityList;
+
     public UserEntity(){}
-
-    public UserEntity(String id,String name){
-        this.id = id;
-        this.name = name;
-    }
-
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
 
     public String getName() {
         return name;
@@ -32,5 +20,13 @@ public class UserEntity {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public List<UserEntity> getChildrenUserEntityList() {
+        return childrenUserEntityList;
+    }
+
+    public void setChildrenUserEntityList(List<UserEntity> childrenUserEntityList) {
+        this.childrenUserEntityList = childrenUserEntityList;
     }
 }

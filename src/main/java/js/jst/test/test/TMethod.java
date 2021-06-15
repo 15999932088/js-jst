@@ -19,9 +19,9 @@ public class TMethod {
         System.out.println(JSON.toJSONString(param));
     }
 
-    @JCTest(entity = BannerEntity.class)
-    public void test3(BannerEntity bannerEntity){
-        System.out.println("111111111111111");
-        System.out.println(JSON.toJSONString(bannerEntity));
-    }
+//    @JCTest(entity = BannerEntity.class)
+//    public void test3(BannerEntity bannerEntity){
+//        System.out.println("111111111111111");
+//        System.out.println(JSON.toJSONString(bannerEntity));
+//    }
 }
