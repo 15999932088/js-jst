@@ -11,9 +11,6 @@ import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.context.annotation.ImportBeanDefinitionRegistrar;
 import org.springframework.core.type.AnnotationMetadata;
-import org.springframework.util.CollectionUtils;
-
-import javax.annotation.PostConstruct;
 import java.util.*;
 
 public class JSWorkerRegistrar implements ImportBeanDefinitionRegistrar{

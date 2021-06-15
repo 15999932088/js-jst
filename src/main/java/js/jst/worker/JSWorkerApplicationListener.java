@@ -10,6 +10,9 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
+/**
+ * 这个监听器是用来监听bean完成后的操作事件,当bean完成操作之后bean的属性等已经处理完成
+ */
 @Component
 public class JSWorkerApplicationListener implements ApplicationListener {
 

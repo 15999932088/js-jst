@@ -49,16 +49,20 @@ public class Reflecter {
                     Annotation[] annotations = method.getAnnotations();
                     if(annotations!=null&&annotations.length>0){
                         for (Annotation annotation : annotations) {
+                            //如果注解是JCTest的情况下,说明要进行单元测试
                             if(annotation.annotationType().equals(JCTest.class)){
                                 //保存当前注解下的method
+                                //开始解读这个方法,并读取方法的具体参数.
                                 JTMethod jtMethod = new JTMethod();
                                 jtMethod.setMethod(method);
                                 Parameter[] parameters = method.getParameters();
+                                //解析这些参数的名,并且根据sql的名称进行与数据库对接,产出具体的sql执行
                                 jtMethod.setParams(explainParams(parameters));
                                 methodList.add(jtMethod);
                             }
                         }
                     }
+                    //先封装,等待后面执行方法
                     reflectProxyMap.put(clazz,methodList);
                 }
             }
@@ -97,6 +101,11 @@ public class Reflecter {
         return objectList.toArray();
     }
 
+    /**
+     * 解析实体,将他们的属性以sql的列名做匹配,完成sql的查询
+     * @param clazz
+     * @return
+     */
     public Object explainEntityObject(Class<?> clazz){
         try {
             Field[] fields = clazz.getDeclaredFields();

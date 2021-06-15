@@ -21,6 +21,12 @@ public class SqlMapper extends AbsSqlMapper implements ISqlMapper, BeanFactoryAw
 //    @Autowired
     SqlSessionFactory sqlSessionFactory;
 
+    /**
+     * sql的操作
+     * @param tableName
+     * @param tableField
+     * @return
+     */
     public List<Map<String, Object>> selectMapper(String tableName, Set<String> tableField) {
         SqlSession sqlSession = null;
         Connection connection = null;

@@ -10,6 +10,10 @@ import org.springframework.util.CollectionUtils;
 
 import java.util.*;
 
+/**
+ * 用来接收注入内容,因为ImportBeanDefinitionRegistrar是beanDefinition注入之前的,bean尚未实例化
+ * 所以用这个类来做中间级,将importBeanDeinitionRegistrar的数据存放在这里
+ */
 public class JSWorker{
 
     List<String> classNames;
