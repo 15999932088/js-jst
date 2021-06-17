@@ -160,7 +160,7 @@ public class Reflecter {
         try {
             boolean hasSetValue = false;
             if(dataList!=null&&dataList.size()>0){
-                Map<String,Object> dataMap = dataList.ge/;.;t(RandomUtils.getRandom(dataList.size()));
+                Map<String,Object> dataMap = dataList.get(RandomUtils.getRandom(dataList.size()));
                 if(dataMap.containsKey(fieldName)){
                     hasSetValue = true;
                     if(Integer.class.equals(fieldType)){
